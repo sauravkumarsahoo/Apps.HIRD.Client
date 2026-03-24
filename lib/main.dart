@@ -5,8 +5,10 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hird/common.dart';
 import 'package:hird/constants.dart';
+import 'package:hird/helpers/device_helper.dart';
 import 'package:hird/models/server_info.dart';
 import 'package:hird/pages/data_visualizer_page.dart';
 import 'package:hird/pages/no_connectivity_page.dart';
@@ -22,8 +24,10 @@ import 'package:wakelock/wakelock.dart';
 
 const minPrintLevel = PrintLevel.info;
 
-void main() {
-  runApp(const MyApp());
+void main() => runApp(const MyApp());
+
+void setup() {
+  GetIt.I.registerSingleton<DeviceHelper>(DeviceHelper());
 }
 
 class MyApp extends StatefulWidget {
@@ -44,7 +48,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initConnectivity();
-
+    setup();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }

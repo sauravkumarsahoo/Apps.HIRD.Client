@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -5,8 +6,10 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hird/generated/sensorcomms.pbgrpc.dart';
+import 'package:hird/helpers/device_helper.dart';
 import 'package:hird/models/server_info.dart';
 import 'package:hird/services/server_scanner_service.dart';
 import 'package:hird/widgets/cpu_core_temps_widget.dart';
@@ -36,23 +39,39 @@ class DataVisualizerPage extends StatefulWidget {
 }
 
 class _DataVisualizerPageState extends State<DataVisualizerPage> {
-  late ScrollController _scrollController;
-  late ScrollController _gridScrollController;
+  final streamInterval = const Duration(seconds: 10);
   final ServerScannerService _service = ServerScannerService();
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  late ScrollController _scrollController;
+  late ScrollController _gridScrollController;
+  late Stream<ReadingDataStream> _serverStream;
+  late Timer serverMonitorTimer;
+
   bool _streamLoaded = false;
 
   @override
   void initState() {
+    _serverStream = monitor();
+    //serverMonitorTimer =
+    //    Timer.periodic(oneMin, (Timer t) => _serverStream = monitor());
+
     _scrollController = ScrollController();
     _gridScrollController = ScrollController();
     super.initState();
     BackButtonInterceptor.add(_popInterceptor);
   }
 
+  ResponseStream<ReadingDataStream> monitor() {
+    return widget.client.monitor(
+        MonitorRequest(deviceName: GetIt.I.get<DeviceHelper>().deviceName),
+        options: CallOptions(timeout: streamInterval));
+  }
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(_popInterceptor);
+    //serverMonitorTimer.cancel();
     super.dispose();
   }
 
@@ -110,68 +129,51 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<BaseDeviceInfo>(
-              future: deviceInfo.deviceInfo,
+            child: StreamBuilder<ReadingDataStream>(
+              stream: _serverStream,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return buildWaitingView(context);
-                }
-
-                return StreamBuilder<ReadingDataStream>(
-                  stream: widget.client.monitor(
-                      MonitorRequest(
-                          deviceName: Platform.isAndroid
-                              ? (snapshot.data as AndroidDeviceInfo).device
-                              : (snapshot.data as IosDeviceInfo).name),
-                      options: CallOptions(timeout: const Duration(days: 30))),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      if (!_streamLoaded) {
-                        return buildWaitingView(context);
-                      } else if (!Navigator.canPop(context)) {
-                        SystemNavigator.pop(animated: true);
-                        return Container();
-                      } else {
-                        _onPop();
-                        Navigator.of(context).pop();
-                        return Container();
-                      }
-                    } else if (snapshot.hasError) {
-                      return buildErrorView(context);
-                    } else {
-                      return OrientationBuilder(
-                        builder: (context, orientation) {
-                          _streamLoaded = true;
-                          return ListView.builder(
-                            itemCount: 5,
-                            controller: _scrollController,
-                            itemBuilder: (context, index) {
-                              switch (index) {
-                                case 0:
-                                  return buildCpuCard(context, snapshot.data!);
-                                case 1:
-                                  return buildGpuCard(context, snapshot.data!);
-                                case 2:
-                                  return buildRamCard(context, snapshot.data!);
-                                case 3:
-                                  return buildSystemCard(
-                                      context, snapshot.data!);
-                                case 4:
-                                  return buildStorageCard(
-                                      context, snapshot.data!);
-                                default:
-                                  return const Center(
-                                    child:
-                                        Text('You should not be seeing this!'),
-                                  );
-                              }
-                            },
-                          );
+                  if (!_streamLoaded) {
+                    return buildWaitingView(context);
+                  } else if (!Navigator.canPop(context)) {
+                    SystemNavigator.pop(animated: true);
+                    return Container();
+                  } else {
+                    _onPop();
+                    Navigator.of(context).pop();
+                    return Container();
+                  }
+                } else if (snapshot.hasError) {
+                  return buildErrorView(context);
+                } else {
+                  return OrientationBuilder(
+                    builder: (context, orientation) {
+                      _streamLoaded = true;
+                      return ListView.builder(
+                        itemCount: 5,
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          switch (index) {
+                            case 0:
+                              return buildCpuCard(context, snapshot.data!);
+                            case 1:
+                              return buildGpuCard(context, snapshot.data!);
+                            case 2:
+                              return buildRamCard(context, snapshot.data!);
+                            case 3:
+                              return buildSystemCard(context, snapshot.data!);
+                            case 4:
+                              return buildStorageCard(context, snapshot.data!);
+                            default:
+                              return const Center(
+                                child: Text('You should not be seeing this!'),
+                              );
+                          }
                         },
                       );
-                    }
-                  },
-                );
+                    },
+                  );
+                }
               },
             ),
           ),

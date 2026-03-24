@@ -117,14 +117,14 @@ class StorageTempGauge extends StatelessWidget {
             annotations: <GaugeAnnotation>[
               GaugeAnnotation(
                   widget: Text('${reading.current.round()} ºC',
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
                   angle: 90,
                   positionFactor: 0.3),
               GaugeAnnotation(
                   widget: Text(label,
                       style: Theme.of(context)
                           .textTheme
-                          .caption!
+                          .bodySmall!
                           .copyWith(fontStyle: FontStyle.italic)),
                   angle: 90,
                   positionFactor: 0.5),
@@ -134,17 +134,17 @@ class StorageTempGauge extends StatelessWidget {
                     children: [
                       Text(
                         'MIN',
-                        style: Theme.of(context).textTheme.overline,
+                        style: Theme.of(context).textTheme.labelSmall,
                         textScaleFactor: 0.7,
                       ),
                       Text(
                         'AVG',
-                        style: Theme.of(context).textTheme.overline,
+                        style: Theme.of(context).textTheme.labelSmall,
                         textScaleFactor: 0.7,
                       ),
                       Text(
                         'MAX',
-                        style: Theme.of(context).textTheme.overline,
+                        style: Theme.of(context).textTheme.labelSmall,
                         textScaleFactor: 0.7,
                       ),
                     ],
@@ -158,17 +158,17 @@ class StorageTempGauge extends StatelessWidget {
                       Text('${reading.min.round()} ºC',
                           style: Theme.of(context)
                               .textTheme
-                              .overline!
+                              .labelSmall!
                               .copyWith(color: minColor)),
                       Text('${reading.avg.round()} ºC',
                           style: Theme.of(context)
                               .textTheme
-                              .overline!
+                              .labelSmall!
                               .copyWith(color: avgColor)),
                       Text('${reading.max.round()} ºC',
                           style: Theme.of(context)
                               .textTheme
-                              .overline!
+                              .labelSmall!
                               .copyWith(color: maxColor)),
                     ],
                   ),

@@ -47,7 +47,7 @@ class CpuCoreUsagesWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text('Core Usages', style: Theme.of(context).textTheme.overline)
+        Text('Core Usages', style: Theme.of(context).textTheme.labelSmall)
       ],
     );
   }

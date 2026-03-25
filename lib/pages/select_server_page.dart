@@ -173,7 +173,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         splashColor: Theme.of(context).splashColor,
-        onTap: () {
+        onTap: () async {
           _service.pause('navigating to Visualizer');
           WakelockPlus.enable();
 
@@ -181,18 +181,21 @@ class _SelectServerPageState extends State<SelectServerPage> {
             _isServerLoading = true;
           });
 
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return DataVisualizerPage(serverInfo: serverInfo);
             }),
           );
 
+          if (!mounted) return;
+
+          _service.resume('returned from Visualizer');
+          WakelockPlus.disable();
+
           setState(() {
             _isServerLoading = false;
           });
-
-          WakelockPlus.disable();
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),

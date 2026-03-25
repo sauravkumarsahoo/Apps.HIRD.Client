@@ -9,30 +9,23 @@ _cardDecoration(BuildContext context) => BoxDecoration(
       color: Theme.of(context).cardColor,
       boxShadow: [
         BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.1),
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.7),
             blurRadius: 30,
             offset: const Offset(0, 10))
       ],
     );
 
 class CenteredColumn extends Column {
-  CenteredColumn({
-    Key? key,
-    MainAxisSize mainAxisSize = MainAxisSize.max,
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
-    TextDirection? textDirection,
-    VerticalDirection verticalDirection = VerticalDirection.down,
-    TextBaseline? textBaseline,
-    List<Widget> children = const <Widget>[],
+  const CenteredColumn({
+    super.key,
+    super.mainAxisSize,
+    super.crossAxisAlignment,
+    super.textDirection,
+    super.verticalDirection,
+    super.textBaseline,
+    super.children,
   }) : super(
-          children: children,
-          key: key,
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: mainAxisSize,
-          crossAxisAlignment: crossAxisAlignment,
-          textDirection: textDirection,
-          verticalDirection: verticalDirection,
-          textBaseline: textBaseline,
         );
 }
 
@@ -43,12 +36,11 @@ class ExpandableFloatCard extends StatefulWidget {
   final String? assetImageName;
 
   const ExpandableFloatCard(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.body,
       this.subtitle,
-      this.assetImageName})
-      : super(key: key);
+      this.assetImageName});
 
   @override
   State<ExpandableFloatCard> createState() => _ExpandableFloatCardState();
@@ -168,9 +160,9 @@ class _ExpandableFloatCardState extends State<ExpandableFloatCard> {
 
 class BlendedAssetImage extends StatelessWidget {
   const BlendedAssetImage({
-    Key? key,
+    super.key,
     required this.assetImageName,
-  }) : super(key: key);
+  });
 
   final String assetImageName;
 
@@ -207,7 +199,7 @@ class FloatCard extends StatelessWidget {
   final Clip clipBehavior;
 
   const FloatCard({
-    Key? key,
+    super.key,
     required this.child,
     this.alignment,
     this.padding,
@@ -220,7 +212,7 @@ class FloatCard extends StatelessWidget {
     this.transform,
     this.transformAlignment,
     this.clipBehavior = Clip.none,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +222,6 @@ class FloatCard extends StatelessWidget {
       color: color,
       width: width,
       height: height,
-      child: child,
       padding: padding,
       clipBehavior: clipBehavior,
       constraints: constraints,
@@ -239,11 +230,10 @@ class FloatCard extends StatelessWidget {
       margin: margin,
       transform: transform,
       transformAlignment: transformAlignment,
+      child: child,
     );
   }
 }
-
-
 
 class LinearTempGauge extends StatelessWidget {
   final ReadingData reading;
@@ -262,14 +252,13 @@ class LinearTempGauge extends StatelessWidget {
   static const double radiusFactor = 1.15;
 
   const LinearTempGauge(
-      {Key? key,
+      {super.key,
       required this.reading,
       required this.label,
       required this.coolLimit,
       required this.warmLimit,
       this.width = 160,
-      this.height = 40})
-      : super(key: key);
+      this.height = 40});
 
   Color _getColor(double value) {
     if (value <= coolLimit) {

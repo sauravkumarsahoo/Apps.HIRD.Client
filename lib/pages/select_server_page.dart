@@ -10,7 +10,7 @@ import 'package:hird/widgets_lib.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class SelectServerPage extends StatefulWidget {
-  const SelectServerPage({Key? key}) : super(key: key);
+  const SelectServerPage({super.key});
 
   @override
   State<SelectServerPage> createState() => _SelectServerPageState();

@@ -8,7 +8,7 @@ class DeviceHelper {
   DeviceHelper() {
     var deviceInfoPlugin = DeviceInfoPlugin();
     deviceInfoPlugin.deviceInfo.then((value) => deviceName = Platform.isAndroid
-        ? (value as AndroidDeviceInfo).device!
-        : (value as IosDeviceInfo).name!);
+        ? (value as AndroidDeviceInfo).device
+        : (value as IosDeviceInfo).name);
   }
 }

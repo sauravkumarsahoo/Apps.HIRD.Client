@@ -5,9 +5,9 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class CpuCoreTempsWidget extends StatelessWidget {
   CpuCoreTempsWidget({
-    Key? key,
+    super.key,
     required this.coreTemps,
-  }) : super(key: key);
+  });
 
   final List<ReadingData> coreTemps;
 

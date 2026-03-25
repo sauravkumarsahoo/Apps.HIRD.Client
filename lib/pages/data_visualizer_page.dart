@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -22,8 +21,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 const cardPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 6);
 
 class DataVisualizerPage extends StatefulWidget {
-  const DataVisualizerPage({Key? key, required this.serverInfo})
-      : super(key: key);
+  const DataVisualizerPage({super.key, required this.serverInfo});
 
   final ServerInfo serverInfo;
 

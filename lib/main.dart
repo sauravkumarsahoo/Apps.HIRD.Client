@@ -31,7 +31,7 @@ void setup() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -42,15 +42,12 @@ class _MyAppState extends State<MyApp> {
 
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   void initState() {
     super.initState();
     initConnectivity();
     setup();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   Future<void> initConnectivity() async {
@@ -83,11 +80,11 @@ class _MyAppState extends State<MyApp> {
 
     return ThemeProvider(
       initTheme: initTheme,
-      builder: (_, _theme) {
+      builder: (_, theme) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: Constants.appName,
-          theme: _theme,
+          theme: theme,
           home: _connectionStatus == ConnectivityResult.ethernet ||
                   _connectionStatus == ConnectivityResult.wifi
               //? buildVisualizerDirectly('192.168.0.242')

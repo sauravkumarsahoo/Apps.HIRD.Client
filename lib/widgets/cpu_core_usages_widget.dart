@@ -4,7 +4,7 @@ import 'package:hird/widgets_lib.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class CpuCoreUsagesWidget extends StatelessWidget {
-  CpuCoreUsagesWidget({Key? key, required this.coreUsages}) : super(key: key);
+  CpuCoreUsagesWidget({super.key, required this.coreUsages});
 
   final List<ReadingData> coreUsages;
 

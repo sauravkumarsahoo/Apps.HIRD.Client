@@ -12,12 +12,12 @@ class GpuTempGauge extends StatelessWidget {
   final double warmLimit = 70;
 
   const GpuTempGauge({
-    Key? key,
+    super.key,
     required this.reading,
     required this.hotspotReading,
     this.width = 160,
     this.height = 160,
-  }) : super(key: key);
+  });
 
   final Color coolColor = Colors.green;
   final Color warmColor = Colors.orange;
@@ -85,19 +85,19 @@ class GpuTempGauge extends StatelessWidget {
                   endWidth: 2,
                   startValue: reading.current < 0 ? reading.current : 0,
                   endValue: coolLimit,
-                  color: coolColor.withOpacity(0.7)),
+                  color: coolColor.withValues(alpha: 0.7)),
               GaugeRange(
                   startWidth: 2,
                   endWidth: 2,
                   startValue: coolLimit,
                   endValue: warmLimit,
-                  color: warmColor.withOpacity(0.7)),
+                  color: warmColor.withValues(alpha: 0.7)),
               GaugeRange(
                   startWidth: 2,
                   endWidth: 2,
                   startValue: warmLimit,
                   endValue: reading.max * 100,
-                  color: hotColor.withOpacity(0.7)),
+                  color: hotColor.withValues(alpha: 0.7)),
             ],
             pointers: <GaugePointer>[
               NeedlePointer(
@@ -143,17 +143,17 @@ class GpuTempGauge extends StatelessWidget {
                       Text(
                         'MIN',
                         style: Theme.of(context).textTheme.labelSmall,
-                        textScaleFactor: 0.7,
+                        textScaler: const TextScaler.linear(0.7),
                       ),
                       Text(
                         'AVG',
                         style: Theme.of(context).textTheme.labelSmall,
-                        textScaleFactor: 0.7,
+                        textScaler: const TextScaler.linear(0.7),
                       ),
                       Text(
                         'MAX',
                         style: Theme.of(context).textTheme.labelSmall,
-                        textScaleFactor: 0.7,
+                        textScaler: const TextScaler.linear(0.7),
                       ),
                     ],
                   ),
@@ -186,7 +186,7 @@ class GpuTempGauge extends StatelessWidget {
                   widget: Text(
                     'HOTSPOT',
                     style: Theme.of(context).textTheme.labelSmall,
-                    textScaleFactor: 0.7,
+                    textScaler: const TextScaler.linear(0.7),
                   ),
                   angle: 90,
                   positionFactor: 1),

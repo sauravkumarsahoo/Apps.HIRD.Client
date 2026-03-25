@@ -7,7 +7,7 @@ import 'package:hird/services/server_scanner_service.dart';
 import 'package:hird/models/server_info.dart';
 import 'package:hird/pages/data_visualizer_page.dart';
 import 'package:hird/widgets_lib.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class SelectServerPage extends StatefulWidget {
   const SelectServerPage({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                                 : Text(
                                     'Select a Server',
                                     style:
-                                        Theme.of(context).textTheme.headline4,
+                                        Theme.of(context).textTheme.headlineMedium,
                                   ),
                           );
                         },
@@ -104,7 +104,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text('Looking for servers...',
-                                style: Theme.of(context).textTheme.subtitle1),
+                                style: Theme.of(context).textTheme.titleMedium),
                           )
                         ],
                       ),
@@ -121,7 +121,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                             servers.length > 1
                                 ? '${servers.length} Servers Found'
                                 : '1 Server Found',
-                            style: Theme.of(context).textTheme.headline5),
+                            style: Theme.of(context).textTheme.headlineSmall),
                       ),
                       Expanded(
                           child: FloatCard(
@@ -173,26 +173,29 @@ class _SelectServerPageState extends State<SelectServerPage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         splashColor: Theme.of(context).splashColor,
-        onTap: () {
+        onTap: () async {
           _service.pause('navigating to Visualizer');
-          Wakelock.enable();
+          WakelockPlus.enable();
 
           setState(() {
             _isServerLoading = true;
           });
 
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return DataVisualizerPage(serverInfo: serverInfo);
             }),
           );
 
+          if (!mounted) return;
+
+          _service.resume('returned from Visualizer');
+          WakelockPlus.disable();
+
           setState(() {
             _isServerLoading = false;
           });
-
-          Wakelock.disable();
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -217,9 +220,9 @@ class _SelectServerPageState extends State<SelectServerPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(serverInfo.ip,
-                              style: Theme.of(context).textTheme.headline6),
+                              style: Theme.of(context).textTheme.titleLarge),
                           Text(serverInfo.info.computerName,
-                              style: Theme.of(context).textTheme.caption)
+                              style: Theme.of(context).textTheme.bodySmall)
                         ],
                       ),
                     ],
@@ -232,15 +235,15 @@ class _SelectServerPageState extends State<SelectServerPage> {
                       Text(serverInfo.info.systemMake,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(fontStyle: FontStyle.italic)),
                       Text(serverInfo.info.cpuName,
-                          style: Theme.of(context).textTheme.bodyText2),
+                          style: Theme.of(context).textTheme.bodyMedium),
                       if (serverInfo.info.gpuName.isNotEmpty)
                         Text(serverInfo.info.gpuName,
-                            style: Theme.of(context).textTheme.bodyText2),
+                            style: Theme.of(context).textTheme.bodyMedium),
                       Text(serverInfo.info.memory,
-                          style: Theme.of(context).textTheme.bodyText2),
+                          style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   ),
                 ],

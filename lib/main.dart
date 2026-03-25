@@ -15,7 +15,7 @@ import 'package:hird/pages/no_connectivity_page.dart';
 import 'package:hird/pages/select_server_page.dart';
 import 'package:hird/services/server_scanner_service.dart';
 import 'package:hird/settings.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 // MOBILE APPS
 // For smartphone apps, please add a link to https://icons8.com in the about section or settings.
@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   FutureBuilder<ServerInfo> buildVisualizerDirectly(String ip) {
-    Wakelock.enable();
+    WakelockPlus.enable();
     return FutureBuilder<ServerInfo>(
       future: ServerScannerService().getServerInfo(ip),
       builder: (context, snapshot) {

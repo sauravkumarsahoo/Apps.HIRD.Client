@@ -28,7 +28,7 @@ class NoConnectivityPage extends StatelessWidget {
                       Text('No network',
                           style: Theme.of(context)
                               .textTheme
-                              .headline4),
+                              .headlineMedium),
                     ],
                   ),
                 )),

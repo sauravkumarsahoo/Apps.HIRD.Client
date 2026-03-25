@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +17,7 @@ import 'package:hird/widgets/cpu_temp_gauge.dart';
 import 'package:hird/widgets/gpu_temp_gauge.dart';
 import 'package:hird/widgets/storage_temp_gauge.dart';
 import 'package:hird/widgets_lib.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 const cardPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 6);
 
@@ -59,7 +58,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
     _scrollController = ScrollController();
     _gridScrollController = ScrollController();
     super.initState();
-    BackButtonInterceptor.add(_popInterceptor);
+
   }
 
   ResponseStream<ReadingDataStream> monitor() {
@@ -70,24 +69,21 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
 
   @override
   void dispose() {
-    BackButtonInterceptor.remove(_popInterceptor);
+
     //serverMonitorTimer.cancel();
     super.dispose();
   }
 
-  bool _popInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    _onPop();
-    return false;
-  }
+
 
   void _onPop() {
     _service.resume('closing Visualizer');
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(onPopInvokedWithResult: (didPop, result) { if (didPop) _onPop(); }, child: Scaffold(
       body: CenteredColumn(
         children: [
           SafeArea(
@@ -109,7 +105,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                     widget.serverInfo.info.computerName,
                     style: Theme.of(context)
                         .textTheme
-                        .subtitle1!
+                        .titleMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ThemeSwitcher(
@@ -179,7 +175,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget buildWaitingView(BuildContext context) {
@@ -193,7 +189,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
         Text('Waiting for data...',
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(fontStyle: FontStyle.italic))
       ],
     );
@@ -205,7 +201,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
         Text('Some error occured :(',
             style: Theme.of(context)
                 .textTheme
-                .subtitle2!
+                .titleSmall!
                 .copyWith(color: Colors.redAccent)),
         const SizedBox(
           height: 12,
@@ -265,7 +261,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                 style: Theme.of(context).textTheme.titleLarge),
             Text(
               'Power Draw',
-              style: Theme.of(context).textTheme.overline,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             const Divider(),
             Text(
@@ -273,7 +269,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                 style: Theme.of(context).textTheme.titleLarge),
             Text(
               'Charge Level',
-              style: Theme.of(context).textTheme.overline,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ],
         ),
@@ -295,7 +291,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                 style: Theme.of(context).textTheme.titleLarge),
             Text(
               'Memory Clock Speed',
-              style: Theme.of(context).textTheme.overline,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             const Divider(),
             Text(
@@ -303,7 +299,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                 style: Theme.of(context).textTheme.titleLarge),
             Text(
               'RAM Usage',
-              style: Theme.of(context).textTheme.overline,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ],
         ),
@@ -334,7 +330,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                         style: Theme.of(context).textTheme.titleLarge),
                     Text(
                       'Core Clock Speed',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     const Divider(),
                     Text(
@@ -342,7 +338,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                         style: Theme.of(context).textTheme.titleLarge),
                     Text(
                       'Memory Clock Speed',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     const Divider(),
                     Text(
@@ -350,7 +346,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                         style: Theme.of(context).textTheme.titleLarge),
                     Text(
                       'Power Draw',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ],
                 ),
@@ -384,7 +380,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                         style: Theme.of(context).textTheme.titleLarge),
                     Text(
                       'Effective Clock Speed',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     const Divider(),
                     Text(
@@ -392,7 +388,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                         style: Theme.of(context).textTheme.titleLarge),
                     Text(
                       'Power Draw',
-                      style: Theme.of(context).textTheme.overline,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     if (isFanRunning) const Divider(),
                     if (isFanRunning)
@@ -402,7 +398,7 @@ class _DataVisualizerPageState extends State<DataVisualizerPage> {
                     if (isFanRunning)
                       Text(
                         'Fan Speed',
-                        style: Theme.of(context).textTheme.overline,
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
                   ],
                 ),

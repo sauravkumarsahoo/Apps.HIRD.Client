@@ -68,7 +68,7 @@ class CpuCoreTempsWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text('Core Temps', style: Theme.of(context).textTheme.overline)
+        Text('Core Temps', style: Theme.of(context).textTheme.labelSmall)
       ],
     );
   }

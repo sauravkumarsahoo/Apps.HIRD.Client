@@ -102,7 +102,7 @@ class _ExpandableFloatCardState extends State<ExpandableFloatCard> {
                                 ? Text(
                                     widget.title,
                                     style:
-                                        Theme.of(context).textTheme.headline6,
+                                        Theme.of(context).textTheme.titleLarge,
                                   )
                                 : Row(
                                     crossAxisAlignment:
@@ -112,7 +112,7 @@ class _ExpandableFloatCardState extends State<ExpandableFloatCard> {
                                         widget.title,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline6,
+                                            .titleLarge,
                                       ),
                                       const SizedBox(
                                         width: 8,
@@ -121,7 +121,7 @@ class _ExpandableFloatCardState extends State<ExpandableFloatCard> {
                                         widget.subtitle!,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .subtitle1!
+                                            .titleMedium!
                                             .copyWith(
                                                 fontStyle: FontStyle.italic,
                                                 color: Theme.of(context)
@@ -299,7 +299,7 @@ class LinearTempGauge extends StatelessWidget {
         minorTicksPerInterval: 0,
         animateAxis: true,
         axisTrackStyle: const LinearAxisTrackStyle(thickness: 1),
-        axisLabelStyle: Theme.of(context).textTheme.overline,
+        axisLabelStyle: Theme.of(context).textTheme.labelSmall,
         useRangeColorForAxis: true,
         ranges: [
           LinearGaugeRange(
